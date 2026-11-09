@@ -37,3 +37,16 @@ The output path must not exist. No application build or package tests are run.
 - Add regression tests only for meaningful failures in distribution logic.
 - Use Conventional Commit subjects with a concise changes list in the body.
 - Explain the behavior changed and checks performed in the PR.
+
+## Repository maintenance
+
+Use a Conventional Commit PR title and a concise changes list in the body.
+Completed PR branches are deleted automatically.
+
+Keep GitHub Actions pinned to full commit SHAs with version comments. Check the
+actions' upstream releases when maintaining workflows. Renovate is not configured:
+application versions and checksums are updated by the release notification workflow.
+
+Publication workflows commit verified generated records directly to main using
+GITHUB_TOKEN. Main rejects deletion and force pushes; requiring pull requests for
+these updates first requires adapting the publication authentication and workflow.
