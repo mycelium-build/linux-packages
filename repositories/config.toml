@@ -1,0 +1,3 @@
+url = "https://packages.datalith.work"
+signing_fingerprint = "2926639D6FF19E8459C4F134C9C65D9D1B69CD63"
+retain_releases = 2

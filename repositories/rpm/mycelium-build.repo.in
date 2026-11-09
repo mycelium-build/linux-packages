@@ -1,0 +1,7 @@
+[mycelium-build]
+name=mycelium-build
+baseurl=@URL@/rpm/$basearch
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=@URL@/signing-key.asc
