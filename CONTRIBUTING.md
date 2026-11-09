@@ -40,8 +40,8 @@ The output path must not exist. No application build or package tests are run.
 
 ## Repository maintenance
 
-Use squash merges with a Conventional Commit PR title and a concise changes list
-in the body. Completed PR branches are deleted automatically.
+Use a Conventional Commit PR title and a concise changes list in the body.
+Completed PR branches are deleted automatically.
 
 Keep GitHub Actions pinned to full commit SHAs with version comments. Check the
 actions' upstream releases when maintaining workflows. Renovate is not configured:
