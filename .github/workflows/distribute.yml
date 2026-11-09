@@ -1,0 +1,93 @@
+name: Publish Linux packages
+on:
+  workflow_dispatch:
+    inputs:
+      app:
+        description: Application directory
+        default: datalith
+        required: true
+      tag:
+        description: Published stable tag (empty selects latest)
+        required: false
+      publish:
+        description: Publish signed pacman/APT/RPM repositories
+        type: boolean
+        default: false
+        required: true
+permissions:
+  contents: read
+concurrency:
+  group: publish-linux-packages
+  cancel-in-progress: false
+jobs:
+  prepare:
+    if: ${{ !inputs.publish || github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    outputs:
+      commit: ${{ steps.commit.outputs.sha }}
+    env:
+      APP: ${{ inputs.app }}
+      TAG: ${{ inputs.tag }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - run: python3 scripts/distribution.py "$APP" --tag "$TAG"
+      - name: Show release changes
+        run: git diff -- apps
+      - name: Commit release records
+        id: commit
+        if: inputs.publish
+        run: |
+          git add apps
+          if ! git diff --cached --quiet; then
+            git config user.name 'datalith-bot[bot]'
+            git config user.email '311197260+datalith-bot[bot]@users.noreply.github.com'
+            git commit -m "chore(distribution): publish $APP release" \
+              -m '- Record published package URLs and checksums'
+            git push origin HEAD:main
+          fi
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+  repositories:
+    needs: prepare
+    if: inputs.publish
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ needs.prepare.outputs.commit }}
+          persist-credentials: false
+      - name: Install repository publishing tools
+        run: sudo apt-get update && sudo apt-get install -y apt-utils createrepo-c rpm gnupg pacman-package-manager
+      - name: Import signing key
+        env:
+          REPOSITORY_SIGNING_KEY: ${{ secrets.REPOSITORY_SIGNING_KEY }}
+        run: |
+          export GNUPGHOME="$RUNNER_TEMP/repository-gnupg"
+          echo "GNUPGHOME=$GNUPGHOME" >> "$GITHUB_ENV"
+          install -d -m 700 "$GNUPGHOME"
+          printf '%s\n' "$REPOSITORY_SIGNING_KEY" | gpg --batch --import
+      - name: Assemble and sign repositories
+        run: python3 scripts/build_repositories.py
+      - name: Remove private key
+        if: always()
+        run: |
+          export GNUPGHOME="$RUNNER_TEMP/repository-gnupg"
+          gpgconf --kill gpg-agent
+          rm -rf "$GNUPGHOME"
+      - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3.0.1
+        with:
+          path: site
+      - name: Deploy repositories
+        id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5

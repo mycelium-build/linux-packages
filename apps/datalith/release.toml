@@ -1,0 +1,2 @@
+repository = "mycelium-build/datalith-app"
+architectures = ["x86_64", "aarch64"]

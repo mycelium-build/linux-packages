@@ -1,0 +1,3 @@
+[mycelium-build]
+SigLevel = Required DatabaseRequired
+Server = @URL@/pacman/$arch
