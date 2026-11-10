@@ -7,7 +7,7 @@ on:
         default: datalith
         required: true
       tag:
-        description: Published stable tag (empty selects latest)
+        description: Published tag (empty selects latest in the application channel)
         required: false
       publish:
         description: Publish signed pacman/APT/RPM repositories

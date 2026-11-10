@@ -11,27 +11,58 @@ import tomllib
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def release_version(tag):
+    """Order stable releases and numbered release candidates numerically."""
+    match = re.fullmatch(r'v(\d+)\.(\d+)\.(\d+)(?:-rc\.(0|[1-9][0-9]*))?', tag)
+    if not match:
+        raise ValueError('Expected vX.Y.Z or vX.Y.Z-rc.N')
+    major, minor, patch, rc = match.groups()
+    return (int(major), int(minor), int(patch), rc is None, int(rc or 0))
+
+
+def matches_channel(release, channel):
+    if release['draft']:
+        return False
+    try:
+        version = release_version(release['tag_name'])
+    except ValueError:
+        return False
+    preview = not version[3]
+    return preview == (channel == 'preview') and release['prerelease'] == preview
+
+
 def refresh(app, tag=None):
     if not re.fullmatch(r'[a-z][a-z0-9-]*', app):
         raise ValueError('Invalid application name')
-    if tag and not re.fullmatch(r'v\d+\.\d+\.\d+', tag):
-        raise ValueError('Expected a stable release tag: vX.Y.Z')
     directory = ROOT / 'apps' / app
     cfg = tomllib.loads((directory / 'release.toml').read_text())
-    endpoint = f'tags/{tag}' if tag else 'latest'
-    release = json.loads(subprocess.check_output(['gh', 'api', f'repos/{cfg["repository"]}/releases/{endpoint}']))
+    channel = cfg.get('channel', 'stable')
+    if channel not in ('stable', 'preview'):
+        raise ValueError('Unknown release channel')
+    if tag:
+        release_version(tag)
+    if not tag and channel == 'preview':
+        pages = json.loads(subprocess.check_output([
+            'gh', 'api', '--paginate', '--slurp', f'repos/{cfg["repository"]}/releases?per_page=100']))
+        candidates = [r for page in pages for r in page if matches_channel(r, channel)]
+        if not candidates:
+            raise ValueError('No published preview release found')
+        release = max(candidates, key=lambda r: release_version(r['tag_name']))
+    else:
+        endpoint = f'tags/{tag}' if tag else 'latest'
+        release = json.loads(subprocess.check_output(['gh', 'api', f'repos/{cfg["repository"]}/releases/{endpoint}']))
+    if not matches_channel(release, channel):
+        raise ValueError(f'Expected a published {channel} release')
     tag = release['tag_name']
-    if release['draft'] or release['prerelease'] or not re.fullmatch(r'v\d+\.\d+\.\d+', tag):
-        raise ValueError('Expected a published stable release')
     version = tag[1:]
     lock_path = directory / 'release.lock.json'
     old_lock = json.loads(lock_path.read_text()) if lock_path.exists() else None
-    if old_lock and tuple(map(int, version.split('.'))) < tuple(map(int, old_lock['tag'][1:].split('.'))):
+    if old_lock and release_version(tag) < release_version(old_lock['tag']):
         raise ValueError('Refusing a release downgrade')
     patterns = []
     for fmt in ('deb', 'rpm', 'pacman'):
         selectors = tomllib.loads((directory / fmt / 'package.toml').read_text())['assets']
-        patterns.extend((selectors[a].format(version=version), fmt, a) for a in cfg['architectures'])
+        patterns.extend((selectors[a].format(version=version.replace('-', '' if fmt == 'pacman' else '.')), fmt, a) for a in cfg['architectures'])
     assets = {}
     for pattern, fmt, arch in patterns:
         matches = [a for a in release['assets'] if fnmatch.fnmatchcase(a['name'], pattern)]
@@ -60,6 +91,6 @@ def refresh(app, tag=None):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('app')
-    parser.add_argument('--tag', help='Published stable tag; defaults to the latest release')
+    parser.add_argument('--tag', help='Published tag; defaults to the latest release in the application channel')
     args = parser.parse_args()
     refresh(args.app, args.tag)
