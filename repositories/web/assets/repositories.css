@@ -1,0 +1,51 @@
+/* Repository page layout on top of the Datalith site's shared primitives. */
+.site-header { display: flex; justify-content: flex-start; padding: 1.5rem 0; }
+.org { font-family: var(--font-pixel); font-weight: 700; color: var(--dl-muted); }
+.org:hover { color: var(--dl-fg); }
+
+h1 { font-size: clamp(2.2rem, 7vw, 3.75rem); margin: clamp(1.5rem, 6vw, 4rem) 0 1.25rem; }
+.intro { max-width: 60ch; font-size: 1.05rem; line-height: 1.65; color: var(--dl-muted); margin-bottom: 2.5rem; }
+
+.managers { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--dl-border); background: var(--dl-surface); }
+.managers button { display: flex; flex-direction: column; gap: .4rem; padding: 1rem 1.25rem 1.1rem; text-align: left; color: var(--dl-muted); }
+.managers button + button { border-left: 1px solid var(--dl-border); }
+.managers .display { font-size: clamp(1.35rem, 4.5vw, 2rem); }
+.managers button:hover { color: var(--dl-fg); }
+.managers button[aria-selected="true"] { color: var(--dl-accent); background: color-mix(in srgb, var(--dl-accent) 8%, transparent); box-shadow: inset 0 -4px 0 var(--dl-accent); }
+.managers button:focus-visible { outline-offset: -4px; }
+.distros { font-size: .8rem; font-weight: 600; }
+.managers button[aria-selected="true"] .distros { color: var(--dl-accent); }
+
+.panel { padding: 1.75rem 0 1rem; }
+.panel p { max-width: 68ch; line-height: 1.6; margin-bottom: .6rem; }
+.panel-title { font-size: 1.5rem; margin-bottom: 1rem; }
+.panel-title .distros { font-family: var(--font-sans); color: var(--dl-accent); margin-left: .5rem; }
+.js .panel-title, .no-js .managers { display: none; }
+
+.command { display: flex; align-items: flex-start; border: 1px solid var(--dl-border); background: var(--dl-code-bg); margin-bottom: 1.5rem; }
+.command pre { flex: 1; min-width: 0; margin: 0; padding: .8rem 1rem; overflow-x: auto; line-height: 1.6; }
+code { font-family: var(--font-mono); font-size: .82rem; }
+.command button { flex: none; margin: .5rem .5rem .5rem 0; padding: .15rem .6rem; border: 1px solid var(--dl-border); background: var(--dl-surface); color: var(--dl-muted); font-size: .75rem; }
+.command button:hover { color: var(--dl-fg); border-color: var(--dl-accent); }
+
+.repo-footer { margin-top: 2rem; padding: 2rem 0 3rem; border-top: 1px solid var(--dl-border); font-size: .9rem; }
+.key-card { padding: 1.25rem; border: 1px solid var(--dl-border); background: var(--dl-surface); }
+.key-card h2 { display: flex; align-items: center; gap: .55rem; font-size: 1rem; margin-bottom: 1rem; }
+.key-card h2 .icon { color: var(--dl-accent); }
+.icon { flex: none; width: 14px; height: 14px; fill: currentColor; }
+.icon.pixel { shape-rendering: crispEdges; }
+.key-label { font-size: .75rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--dl-muted); margin-bottom: .35rem; }
+.fingerprint { display: block; padding: .65rem .8rem; border: 1px solid var(--dl-border); background: var(--dl-code-bg); font-size: .85rem; letter-spacing: .03em; overflow-wrap: anywhere; color: var(--dl-fg); margin-bottom: 1rem; }
+.footer-links { display: flex; flex-wrap: wrap; gap: .5rem; }
+.footer-button { display: inline-flex; align-items: center; gap: .5rem; padding: .65rem .9rem; font-size: .84rem; font-weight: 700; line-height: 1; color: var(--dl-fg); background: var(--dl-surface-alt); transition: transform .06s steps(2, jump-none), background .12s; }
+.footer-button:hover, .footer-button:focus-visible { background: color-mix(in srgb, var(--dl-accent) 16%, var(--dl-surface-alt)); }
+.footer-button:active { transform: translate(2px, 2px); }
+#copy-status { min-height: 1.5em; font-size: .8rem; color: var(--dl-muted); margin: 1rem 0 0; }
+
+@media (width <= 32rem) {
+  .managers button { padding: .8rem .75rem .9rem; }
+  .distros { font-size: .7rem; }
+  .key-card { padding: 1rem; }
+  .footer-links { display: grid; }
+  .footer-button { justify-content: center; }
+}

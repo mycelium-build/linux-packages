@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Set up the signed Mycelium Build repositories for APT, DNF and pacman, then install Datalith with your package manager.">
+  <title>Linux repositories · Mycelium Build</title>
+  <link rel="stylesheet" href="assets/theme.css">
+  <link rel="stylesheet" href="assets/base.css">
+  <link rel="stylesheet" href="assets/repositories.css">
+  <script>document.documentElement.className = 'js';</script>
+</head>
+<body>
+<div class="page-shell">
+<header class="site-header"><a class="org" href="https://github.com/mycelium-build">Mycelium Build</a></header>
+<main>
+  <h1 class="display">Linux repositories</h1>
+  <p class="intro">Install Mycelium Build applications from signed repositories with your usual package manager. Add the repository once and future releases arrive with your regular updates.</p>
+
+  <div class="managers" role="tablist" aria-label="Package manager">
+    <button type="button" role="tab" id="tab-apt" aria-controls="apt" aria-selected="true"><span class="display">APT</span><span class="distros">Debian · Ubuntu</span></button>
+    <button type="button" role="tab" id="tab-dnf" aria-controls="dnf" aria-selected="false" tabindex="-1"><span class="display">DNF</span><span class="distros">Fedora</span></button>
+    <button type="button" role="tab" id="tab-pacman" aria-controls="pacman" aria-selected="false" tabindex="-1"><span class="display">pacman</span><span class="distros">Arch Linux</span></button>
+  </div>
+
+  <section class="panel" id="apt" role="tabpanel" aria-labelledby="tab-apt">
+    <h2 class="display panel-title">APT <span class="distros">Debian · Ubuntu</span></h2>
+    <p>Add the signing key and repository source, then refresh the package index:</p>
+    <div class="command"><pre tabindex="0"><code>sudo install -d -m 0755 /usr/share/keyrings
+sudo curl -fsSLo /usr/share/keyrings/mycelium-build.asc @URL@/signing-key.asc
+sudo curl -fsSLo /etc/apt/sources.list.d/mycelium-build.sources @URL@/mycelium-build.sources
+sudo apt update</code></pre></div>
+    <p>For example, install Datalith:</p>
+    <div class="command"><pre tabindex="0"><code>sudo apt install datalith</code></pre></div>
+  </section>
+
+  <section class="panel" id="dnf" role="tabpanel" aria-labelledby="tab-dnf">
+    <h2 class="display panel-title">DNF <span class="distros">Fedora</span></h2>
+    <p>Add the repository configuration. DNF asks you to import the signing key on first use; check that it matches the fingerprint below.</p>
+    <div class="command"><pre tabindex="0"><code>sudo curl -fsSLo /etc/yum.repos.d/mycelium-build.repo @URL@/mycelium-build.repo</code></pre></div>
+    <p>For example, install Datalith:</p>
+    <div class="command"><pre tabindex="0"><code>sudo dnf install datalith</code></pre></div>
+  </section>
+
+  <section class="panel" id="pacman" role="tabpanel" aria-labelledby="tab-pacman">
+    <h2 class="display panel-title">pacman <span class="distros">Arch Linux</span></h2>
+    <p>Import and locally trust the repository signing key:</p>
+    <div class="command"><pre tabindex="0"><code>curl -fsSLo /tmp/mycelium-build.asc @URL@/signing-key.asc
+sudo pacman-key --add /tmp/mycelium-build.asc
+sudo pacman-key --lsign-key @FINGERPRINT@</code></pre></div>
+    <p>Add this block at the end of <code>/etc/pacman.conf</code>:</p>
+    <div class="command"><pre tabindex="0"><code>[mycelium-build]
+SigLevel = Required DatabaseRequired
+Server = @URL@/pacman/$arch</code></pre></div>
+    <p>For example, update your system and install Datalith:</p>
+    <div class="command"><pre tabindex="0"><code>sudo pacman -Syu datalith</code></pre></div>
+  </section>
+</main>
+<footer class="repo-footer">
+  <section class="key-card" aria-labelledby="key-title">
+    <h2 id="key-title"><svg class="icon pixel" viewBox="0 0 7 7" aria-hidden="true" focusable="false"><path d="M2 0h3v1H2zM1 1h1v2H1zM5 1h1v2H5zM0 3h7v1H0zM0 4h1v2H0zM6 4h1v2H6zM3 4h1v1H3zM0 6h7v1H0z"/></svg>Repository signing key</h2>
+    <p class="key-label">Fingerprint</p>
+    <code class="fingerprint">@FINGERPRINT@</code>
+    <div class="footer-links">
+      <a class="footer-button" href="signing-key.asc" download><svg class="icon pixel" viewBox="0 0 7 7" aria-hidden="true" focusable="false"><path d="M3 0h1v5H3zM1 2h1v1H1zM5 2h1v1H5zM2 3h1v1H2zM4 3h1v1H4zM0 5h1v2H0zM6 5h1v2H6zM1 6h5v1H1z"/></svg><span>Download public key</span></a>
+      <a class="footer-button" href="https://github.com/mycelium-build/linux-packages"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span>View on GitHub</span></a>
+    </div>
+  </section>
+  <p id="copy-status" role="status" aria-live="polite"></p>
+</footer>
+</div>
+<script>
+  const tabs = [...document.querySelectorAll('[role="tab"]')];
+  const select = (tab) => tabs.forEach((item) => {
+    const active = item === tab;
+    item.setAttribute('aria-selected', String(active));
+    item.tabIndex = active ? 0 : -1;
+    document.getElementById(item.getAttribute('aria-controls')).hidden = !active;
+  });
+  const activate = (tab) => {
+    select(tab);
+    history.replaceState(null, '', `#${tab.getAttribute('aria-controls')}`);
+  };
+  tabs.forEach((tab, index) => {
+    tab.addEventListener('click', () => activate(tab));
+    tab.addEventListener('keydown', (event) => {
+      const next = { ArrowLeft: index - 1, ArrowRight: index + 1, Home: 0, End: tabs.length - 1 }[event.key];
+      if (next === undefined) return;
+      event.preventDefault();
+      const target = tabs[(next + tabs.length) % tabs.length];
+      activate(target);
+      target.focus();
+    });
+  });
+  select(tabs.find((tab) => `#${tab.getAttribute('aria-controls')}` === location.hash) ?? tabs[0]);
+
+  if (navigator.clipboard && window.isSecureContext) {
+    const status = document.getElementById('copy-status');
+    document.querySelectorAll('.command').forEach((block) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.textContent = 'Copy';
+      button.setAttribute('aria-label', 'Copy commands');
+      button.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(block.querySelector('code').textContent);
+          button.textContent = 'Copied';
+          status.textContent = 'Commands copied.';
+          setTimeout(() => { button.textContent = 'Copy'; }, 2000);
+        } catch {
+          status.textContent = 'Could not copy. Select the commands and copy them manually.';
+        }
+      });
+      block.append(button);
+    });
+  }
+</script>
+</body>
+</html>

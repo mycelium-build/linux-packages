@@ -1,0 +1,45 @@
+/* Default Datalith palettes from datalith-site/src/styles/themes.css. */
+:root {
+	color-scheme: light;
+	--dl-bg: #F9F9F9;
+	--dl-surface: #FEFEFE;
+	--dl-surface-alt: #E7E7E7;
+	--dl-fg: #000000;
+	--dl-muted: #707070;
+	--dl-border: #D2D2D2;
+	--dl-accent: #1e8dff;
+	--dl-accent-fg: #FFFFFF;
+	--dl-ring: #1e8dff;
+	--dl-code-bg: #ffffff;
+	--dl-yellow: #B59A00;
+	--dl-red: #d21f07;
+	--dl-green: #319a00;
+	--dl-blue: #1e8dff;
+	--dl-cyan: #007E8A;
+	--dl-magenta: #9A0068;
+	--dl-logo-1: #86b5e5;
+	--dl-logo-2: #d3dde7;
+}
+@media (prefers-color-scheme: dark) {
+:root {
+	color-scheme: dark;
+	--dl-bg: #131313;
+	--dl-surface: #1C1C1E;
+	--dl-surface-alt: #202020;
+	--dl-fg: #DEDEDE;
+	--dl-muted: #9D9D9D;
+	--dl-border: #303030;
+	--dl-accent: #1e8dff;
+	--dl-accent-fg: #F2F9FF;
+	--dl-ring: #1e8dff;
+	--dl-code-bg: #131313;
+	--dl-yellow: #FFC600;
+	--dl-red: #FF5257;
+	--dl-green: #30D158;
+	--dl-blue: #1e8dff;
+	--dl-cyan: #07FDD3;
+	--dl-magenta: #A550A7;
+	--dl-logo-1: #86b5e5;
+	--dl-logo-2: #d3dde7;
+}
+}
