@@ -1,0 +1,41 @@
+{
+  "tag": "v1.1.0-rc.2",
+  "assets": {
+    "datalith-preview_1.1.0.rc.2-1_amd64.deb": {
+      "url": "https://github.com/mycelium-build/datalith-app/releases/download/v1.1.0-rc.2/datalith-preview_1.1.0.rc.2-1_amd64.deb",
+      "sha256": "c31e6b64ef7c46d68a14624c56794e4e853ab24af1c493a39ae06a5018477d6e",
+      "format": "deb",
+      "arch": "x86_64"
+    },
+    "datalith-preview_1.1.0.rc.2-1_arm64.deb": {
+      "url": "https://github.com/mycelium-build/datalith-app/releases/download/v1.1.0-rc.2/datalith-preview_1.1.0.rc.2-1_arm64.deb",
+      "sha256": "b8dc9f670a5bfaac1c709f00675a95f1a8ca6adc2575ff001d08c2bd4b259c4b",
+      "format": "deb",
+      "arch": "aarch64"
+    },
+    "datalith-preview-1.1.0.rc.2-1.x86_64.rpm": {
+      "url": "https://github.com/mycelium-build/datalith-app/releases/download/v1.1.0-rc.2/datalith-preview-1.1.0.rc.2-1.x86_64.rpm",
+      "sha256": "cba29a07b8b71ba474179df1b895fd4f89b4c5fd9eea0b3656cbe044b2dd71b8",
+      "format": "rpm",
+      "arch": "x86_64"
+    },
+    "datalith-preview-1.1.0.rc.2-1.aarch64.rpm": {
+      "url": "https://github.com/mycelium-build/datalith-app/releases/download/v1.1.0-rc.2/datalith-preview-1.1.0.rc.2-1.aarch64.rpm",
+      "sha256": "0d439b3eb3bd50ef2fca580c42f656f2c94d1e2f1c8b17d9e6fa678f767dd899",
+      "format": "rpm",
+      "arch": "aarch64"
+    },
+    "datalith-preview-1.1.0rc.2-1-x86_64.pkg.tar.zst": {
+      "url": "https://github.com/mycelium-build/datalith-app/releases/download/v1.1.0-rc.2/datalith-preview-1.1.0rc.2-1-x86_64.pkg.tar.zst",
+      "sha256": "aa4e970a8b91191168e8eaebb326b37d59cff9157a4e5c5cb0a06219499a69e6",
+      "format": "pacman",
+      "arch": "x86_64"
+    },
+    "datalith-preview-1.1.0rc.2-1-aarch64.pkg.tar.zst": {
+      "url": "https://github.com/mycelium-build/datalith-app/releases/download/v1.1.0-rc.2/datalith-preview-1.1.0rc.2-1-aarch64.pkg.tar.zst",
+      "sha256": "d0aba2bdf1439d8d3e03a8264eb3ccdb26c57bcb6bd50e4da968dd9a782ae7e7",
+      "format": "pacman",
+      "arch": "aarch64"
+    }
+  }
+}

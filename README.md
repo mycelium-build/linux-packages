@@ -45,6 +45,10 @@ sudo curl -fsSLo /etc/yum.repos.d/mycelium-build.repo https://packages.datalith.
 sudo dnf install datalith
 ```
 
+Install `datalith-preview` instead of `datalith` to opt into release candidates.
+Both packages use the same repositories and have independent release histories;
+installing the stable package never opts you into preview updates.
+
 The signing key fingerprint is `2926639D6FF19E8459C4F134C9C65D9D1B69CD63`.
 
 ## Publication
@@ -55,7 +59,7 @@ repositories and deploys them together to GitHub Pages. It does not run package
 tests. The two latest releases per application remain available.
 
 To retry, open **Actions → Publish Linux packages → Run workflow** on `main`.
-Select the application and tag (`vX.Y.Z`), or leave the tag empty for the latest
+Select the application (`datalith` or `datalith-preview`) and tag (`vX.Y.Z` or `vX.Y.Z-rc.N`), or leave the tag empty for the latest
 stable release. Enable **publish** to deploy; leave it off to inspect release
 record changes in the logs.
 

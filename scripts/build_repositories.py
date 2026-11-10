@@ -11,6 +11,8 @@ import subprocess
 import tomllib
 import urllib.request
 
+from distribution import release_version
+
 ROOT = Path(__file__).resolve().parents[1]
 DEB_ARCH = {'x86_64': 'amd64', 'aarch64': 'arm64'}
 
@@ -42,7 +44,7 @@ def build(output):
     # Keep the previous release for clients with cached repository metadata.
     snapshots = []
     for releases in sorted((ROOT / 'apps').glob('*/releases')):
-        versions = sorted(releases.glob('v*.json'), key=lambda p: tuple(map(int, p.stem[1:].split('.'))))
+        versions = sorted(releases.glob('v*.json'), key=lambda p: release_version(p.stem))
         snapshots.extend(versions[-cfg['retain_releases']:])
     for snapshot in snapshots:
         app = snapshot.parent.parent.name

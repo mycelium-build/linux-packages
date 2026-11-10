@@ -30,7 +30,7 @@
 sudo curl -fsSLo /usr/share/keyrings/mycelium-build.asc @URL@/signing-key.asc
 sudo curl -fsSLo /etc/apt/sources.list.d/mycelium-build.sources @URL@/mycelium-build.sources
 sudo apt update</code></pre></div>
-    <p>For example, install Datalith:</p>
+    <p>Install Datalith (or use <code>datalith-preview</code> for release candidates):</p>
     <div class="command"><pre tabindex="0"><code>sudo apt install datalith</code></pre></div>
   </section>
 
@@ -38,7 +38,7 @@ sudo apt update</code></pre></div>
     <h2 class="display panel-title">DNF <span class="distros">Fedora</span></h2>
     <p>Add the repository configuration. DNF asks you to import the signing key on first use; check that it matches the fingerprint below.</p>
     <div class="command"><pre tabindex="0"><code>sudo curl -fsSLo /etc/yum.repos.d/mycelium-build.repo @URL@/mycelium-build.repo</code></pre></div>
-    <p>For example, install Datalith:</p>
+    <p>Install Datalith (or use <code>datalith-preview</code> for release candidates):</p>
     <div class="command"><pre tabindex="0"><code>sudo dnf install datalith</code></pre></div>
   </section>
 
@@ -52,7 +52,7 @@ sudo pacman-key --lsign-key @FINGERPRINT@</code></pre></div>
     <div class="command"><pre tabindex="0"><code>[mycelium-build]
 SigLevel = Required DatabaseRequired
 Server = @URL@/pacman/$arch</code></pre></div>
-    <p>For example, update your system and install Datalith:</p>
+    <p>Update your system and install Datalith (or use <code>datalith-preview</code> for release candidates):</p>
     <div class="command"><pre tabindex="0"><code>sudo pacman -Syu datalith</code></pre></div>
   </section>
 </main>

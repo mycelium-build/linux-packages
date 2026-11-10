@@ -1,0 +1,3 @@
+[assets]
+x86_64 = "datalith-preview-{version}-*-x86_64.pkg.tar.zst"
+aarch64 = "datalith-preview-{version}-*-aarch64.pkg.tar.zst"
