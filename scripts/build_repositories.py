@@ -11,7 +11,7 @@ import subprocess
 import tomllib
 import urllib.request
 
-from distribution import release_version
+from distribution import retained_records
 
 ROOT = Path(__file__).resolve().parents[1]
 DEB_ARCH = {'x86_64': 'amd64', 'aarch64': 'arm64'}
@@ -41,12 +41,9 @@ def build(output):
     key_listing = subprocess.check_output(['gpg', '--with-colons', '--list-keys', key], text=True)
     key_created = next(line.split(':')[5] for line in key_listing.splitlines() if line.startswith('pub:'))
     downloaded = {}
-    # Keep the previous release for clients with cached repository metadata.
-    snapshots = []
-    for releases in sorted((ROOT / 'apps').glob('*/releases')):
-        versions = sorted(releases.glob('v*.json'), key=lambda p: release_version(p.stem))
-        snapshots.extend(versions[-cfg['retain_releases']:])
-    for snapshot in snapshots:
+    # Keep the previous release and superseded packaging revisions for clients with cached
+    # repository metadata; pacman lists only the current packages.
+    for snapshot in retained_records(ROOT / 'apps', cfg['retain_releases']):
         app = snapshot.parent.parent.name
         for name, asset in json.loads(snapshot.read_text())['assets'].items():
             if asset['format'] == 'deb':

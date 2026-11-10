@@ -72,9 +72,51 @@ class PreviewTests(unittest.TestCase):
             })
         return {'tag_name': tag, 'draft': False, 'prerelease': True, 'assets': assets}
 
-    def refresh(self, release, app='datalith-preview'):
+    def refresh(self, release, app='datalith-preview', revision=1):
         with patch.object(d.subprocess, 'check_output', return_value=json.dumps(release)):
-            d.refresh(app, release['tag_name'])
+            d.refresh(app, release['tag_name'], revision)
+
+    def revised(self, release, number):
+        """Add pacman packages at a higher package release, as an upstream repack does."""
+        extra = [{**a, 'name': a['name'].replace('-1-', f'-{number}-'),
+                  'browser_download_url': a['browser_download_url'].replace('-1-', f'-{number}-'),
+                  'digest': 'sha256:' + str(number) * 64}
+                 for a in release['assets'] if a['name'].endswith('-1-x86_64.pkg.tar.zst')
+                 or a['name'].endswith('-1-aarch64.pkg.tar.zst')]
+        return {**release, 'assets': release['assets'] + extra}
+
+    def test_packaging_revision_keeps_the_original_record(self):
+        releases = self.directory / 'releases'
+        original = (releases / 'v1.1.0-rc.2.json').read_bytes()
+        release = self.revised(self.release(self.lock['tag']), 2)
+        self.refresh(release)
+        self.assertEqual((self.directory / 'release.lock.json').read_bytes(), original)
+        self.refresh(release, revision=2)
+        self.refresh(release, revision=2)
+        lock = json.loads((self.directory / 'release.lock.json').read_text())
+        self.assertEqual(lock, json.loads((releases / 'v1.1.0-rc.2+r2.json').read_text()))
+        self.assertEqual((releases / 'v1.1.0-rc.2.json').read_bytes(), original)
+        self.assertEqual(lock['revision'], 2)
+        self.assertEqual(sorted(n for n in lock['assets'] if n.endswith('.pkg.tar.zst')),
+                         ['datalith-preview-1.1.0rc.2-2-aarch64.pkg.tar.zst',
+                          'datalith-preview-1.1.0rc.2-2-x86_64.pkg.tar.zst'])
+        self.assertEqual({n: a for n, a in lock['assets'].items() if a['format'] != 'pacman'},
+                         {n: a for n, a in self.lock['assets'].items() if a['format'] != 'pacman'})
+        self.refresh(self.release('v1.1.0-rc.3'))
+        self.assertNotIn('revision', json.loads((self.directory / 'release.lock.json').read_text()))
+
+    def test_packaging_revisions_cannot_go_back_or_drop_published_packages(self):
+        release = self.revised(self.release(self.lock['tag']), 2)
+        with self.assertRaisesRegex(ValueError, 'no package at revision 3'):
+            self.refresh(release, revision=3)
+        self.refresh(release, revision=2)
+        before = {p: p.read_bytes() for p in self.directory.rglob('*') if p.is_file()}
+        with self.assertRaisesRegex(ValueError, 'downgrade'):
+            self.refresh(release, revision=1)
+        dropped = {**release, 'assets': [a for a in release['assets'] if '-1-x86_64' not in a['name']]}
+        with self.assertRaisesRegex(ValueError, 'Published release assets changed'):
+            self.refresh(self.revised(dropped, 3), revision=3)
+        self.assertEqual({p: p.read_bytes() for p in self.directory.rglob('*') if p.is_file()}, before)
 
     def test_preview_formats_and_independent_history(self):
         stable = self.stable.read_bytes()
@@ -115,6 +157,17 @@ class PreviewTests(unittest.TestCase):
         release['assets'][0]['digest'] = 'sha256:' + '0' * 64
         with self.assertRaisesRegex(ValueError, 'Published release assets changed'):
             self.refresh(release)
+
+    def test_retention_keeps_every_revision_of_the_retained_releases(self):
+        releases = self.directory / 'releases'
+        for name in ('v1.0.0-rc.1', 'v1.0.0-rc.9+r2', 'v1.1.0-rc.2+r2', 'v1.1.0-rc.2+r10', 'v1.0.0-rc.9'):
+            (releases / f'{name}.json').write_text('{}')
+        kept = [p.stem for p in d.retained_records(self.directory.parent, 2) if p.parent == releases]
+        self.assertEqual(kept, ['v1.0.0-rc.9', 'v1.0.0-rc.9+r2', 'v1.1.0-rc.2', 'v1.1.0-rc.2+r2',
+                                'v1.1.0-rc.2+r10'])
+        for name in ('v1.1.0-rc.2+r1', 'v1.1.0-rc.2+r', 'v1.1.0-rc.2+r02'):
+            with self.subTest(name=name), self.assertRaises(ValueError):
+                d.record_key(name)
 
     def test_retention_order_handles_preview_and_stable_tags(self):
         tags = ['v1.2.0-rc.10', 'v1.2.0', 'v1.2.0-rc.2', 'v1.1.9', 'v1.3.0-rc.0']

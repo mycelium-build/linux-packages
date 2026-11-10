@@ -20,6 +20,11 @@ remain unchanged; packaging fixes and version changes belong in the application
 repository. Repository configuration fixes can be deployed by rerunning publication
 with the same tag, without rebuilding the application.
 
+A packaging revision republishes packages of an existing tag under a higher package
+release (pkgrel), uploaded upstream as new assets. Select it with `--revision N`: it is
+recorded in `releases/<tag>+rN.json`, and earlier records and assets must stay unchanged.
+Superseded revisions of retained releases stay in the APT, RPM and pacman pools.
+
 To assemble repositories locally, install `apt-ftparchive`, `createrepo_c`,
 `rpmsign`, `repo-add` and GnuPG, and use a `GNUPGHOME` containing the signing key:
 

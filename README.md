@@ -60,7 +60,8 @@ tests. The two latest releases per application remain available.
 
 To retry, open **Actions → Publish Linux packages → Run workflow** on `main`.
 Select the application (`datalith` or `datalith-preview`) and tag (`vX.Y.Z` or `vX.Y.Z-rc.N`), or leave the tag empty for the latest
-stable release. Enable **publish** to deploy; leave it off to inspect release
+stable release. Set **revision** only for a packaging revision published
+upstream (for example `2` for repackaged `...-2-<arch>.pkg.tar.zst` packages). Enable **publish** to deploy; leave it off to inspect release
 record changes in the logs.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for maintenance and contribution rules.
