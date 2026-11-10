@@ -110,6 +110,17 @@ class PreviewTests(unittest.TestCase):
             d.refresh('datalith-preview')
         self.assertEqual(json.loads((self.directory / 'release.lock.json').read_text())['tag'], 'v99.0.0-rc.10')
 
+    def test_preview_accepts_nfpm_tilde_filenames(self):
+        release = self.release('v99.0.0-rc.3')
+        for asset in release['assets']:
+            if asset['name'].endswith(('.deb', '.rpm')):
+                asset['name'] = asset['name'].replace('99.0.0.rc.3', '99.0.0~rc.3')
+        self.refresh(release)
+        lock = json.loads((self.directory / 'release.lock.json').read_text())
+        self.assertEqual(len(lock['assets']), 6)
+        self.assertIn('datalith-preview_99.0.0~rc.3-1_amd64.deb', lock['assets'])
+        self.assertIn('datalith-preview-99.0.0~rc.3-1.aarch64.rpm', lock['assets'])
+
     def test_preview_assets_cannot_be_replaced(self):
         release = self.release(self.lock['tag'])
         release['assets'][0]['digest'] = 'sha256:' + '0' * 64
