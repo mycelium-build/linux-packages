@@ -59,10 +59,11 @@ def refresh(app, tag=None):
     old_lock = json.loads(lock_path.read_text()) if lock_path.exists() else None
     if old_lock and release_version(tag) < release_version(old_lock['tag']):
         raise ValueError('Refusing a release downgrade')
+    # Published previews used a dot; current nFPM filenames use a tilde for DEB/RPM.
     patterns = []
     for fmt in ('deb', 'rpm', 'pacman'):
         selectors = tomllib.loads((directory / fmt / 'package.toml').read_text())['assets']
-        patterns.extend((selectors[a].format(version=version.replace('-', '' if fmt == 'pacman' else '.')), fmt, a) for a in cfg['architectures'])
+        patterns.extend((selectors[a].format(version=version.replace('-', '' if fmt == 'pacman' else '[.~]')), fmt, a) for a in cfg['architectures'])
     assets = {}
     for pattern, fmt, arch in patterns:
         matches = [a for a in release['assets'] if fnmatch.fnmatchcase(a['name'], pattern)]
