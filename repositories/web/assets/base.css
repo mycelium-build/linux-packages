@@ -1,0 +1,87 @@
+/* Shared primitives adapted from datalith-site/src/styles/base.css. */
+@font-face {
+    font-family: "Pixeloid Sans";
+    font-weight: 400;
+    src: url("fonts/PixeloidSans.ttf") format("truetype");
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Pixeloid Sans";
+    font-weight: 700;
+    src: url("fonts/PixeloidSans-Bold.ttf") format("truetype");
+    font-display: swap;
+}
+
+:root {
+    --font-sans:
+        -apple-system, blinkmacsystemfont, "Segoe UI", "Helvetica Neue", "Inter", system-ui,
+        sans-serif;
+    --font-pixel: "Pixeloid Sans", var(--font-sans);
+    --font-mono:
+        ui-monospace, "SF Mono", "Cascadia Code", menlo, consolas, "Liberation Mono", monospace;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--dl-fg);
+    background: var(--dl-bg);
+    text-rendering: optimizelegibility;
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    margin: 0;
+    background: var(--dl-bg);
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button {
+    font: inherit;
+    color: inherit;
+    padding: 0;
+    cursor: pointer;
+    background: none;
+    border: 0;
+}
+
+h1,
+h2,
+p,
+pre {
+    margin-top: 0;
+}
+
+::selection {
+    background: color-mix(in srgb, var(--dl-accent) 30%, transparent);
+}
+
+:focus-visible {
+    outline: 2px solid var(--dl-accent);
+    outline-offset: 2px;
+}
+
+.page-shell {
+    max-width: 52rem;
+    padding: 0 clamp(1rem, 5vw, 3rem);
+    margin: 0 auto;
+}
+
+.display {
+    font-family: var(--font-pixel);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: 0.01em;
+}

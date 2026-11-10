@@ -3,6 +3,7 @@
 import argparse
 import gzip
 import hashlib
+import html
 import json
 from pathlib import Path
 import shutil
@@ -121,13 +122,11 @@ def build(output):
         content = (ROOT / 'repositories' / template).read_text().replace('@URL@', url)
         (output / target).write_text(content)
     (output / '.nojekyll').touch()
-    (output / 'index.html').write_text(
-        '<!doctype html><html lang="en"><meta charset="utf-8"><title>Mycelium Build packages</title>'
-        '<h1>Mycelium Build Linux packages</h1><p>'
-        '<a href="https://github.com/mycelium-build/linux-packages#installation">Installation instructions</a>'
-        '</p><p><a href="signing-key.asc">Signing key</a> · '
-        '<a href="mycelium-build.sources">APT source</a> · <a href="mycelium-build.repo">RPM repository</a> · '
-        '<a href="mycelium-build.conf">pacman repository</a></p></html>')
+    shutil.copytree(ROOT / 'repositories/web/assets', output / 'assets')
+    page = (ROOT / 'repositories/web/index.html.in').read_text()
+    page = page.replace('@URL@', html.escape(url, quote=True))
+    page = page.replace('@FINGERPRINT@', html.escape(key, quote=True))
+    (output / 'index.html').write_text(page)
     size = sum(p.stat().st_size for p in output.rglob('*') if p.is_file())
     if size >= 950_000_000:
         raise ValueError('Repository approaches the GitHub Pages 1 GB limit; move hosting before publishing')
