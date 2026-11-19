@@ -1,39 +1,39 @@
 {
-  "tag": "v1.1.0-rc.2",
+  "tag": "v1.2.0-rc.1",
   "assets": {
-    "datalith-preview_1.1.0.rc.2-1_amd64.deb": {
-      "url": "https://github.com/mycelium-build/datalith-app/releases/download/v1.1.0-rc.2/datalith-preview_1.1.0.rc.2-1_amd64.deb",
-      "sha256": "c31e6b64ef7c46d68a14624c56794e4e853ab24af1c493a39ae06a5018477d6e",
+    "datalith-preview_1.2.0.rc.1-1_amd64.deb": {
+      "url": "https://github.com/mycelium-build/datalith-app/releases/download/v1.2.0-rc.1/datalith-preview_1.2.0.rc.1-1_amd64.deb",
+      "sha256": "05a87e330c890f9bd7585af9e86424786a8ec39b48c0daf19fbd56d5994dea82",
       "format": "deb",
       "arch": "x86_64"
     },
-    "datalith-preview_1.1.0.rc.2-1_arm64.deb": {
-      "url": "https://github.com/mycelium-build/datalith-app/releases/download/v1.1.0-rc.2/datalith-preview_1.1.0.rc.2-1_arm64.deb",
-      "sha256": "b8dc9f670a5bfaac1c709f00675a95f1a8ca6adc2575ff001d08c2bd4b259c4b",
+    "datalith-preview_1.2.0.rc.1-1_arm64.deb": {
+      "url": "https://github.com/mycelium-build/datalith-app/releases/download/v1.2.0-rc.1/datalith-preview_1.2.0.rc.1-1_arm64.deb",
+      "sha256": "bf1962327d4abc567ea92673d95b1bca41b7e72343ad8ad313f5381252305ce6",
       "format": "deb",
       "arch": "aarch64"
     },
-    "datalith-preview-1.1.0.rc.2-1.x86_64.rpm": {
-      "url": "https://github.com/mycelium-build/datalith-app/releases/download/v1.1.0-rc.2/datalith-preview-1.1.0.rc.2-1.x86_64.rpm",
-      "sha256": "cba29a07b8b71ba474179df1b895fd4f89b4c5fd9eea0b3656cbe044b2dd71b8",
+    "datalith-preview-1.2.0.rc.1-1.x86_64.rpm": {
+      "url": "https://github.com/mycelium-build/datalith-app/releases/download/v1.2.0-rc.1/datalith-preview-1.2.0.rc.1-1.x86_64.rpm",
+      "sha256": "cf6870fc3c2beb86f02eb21e44c093bc4ef3414960edf1c37eb474832e2dd3ee",
       "format": "rpm",
       "arch": "x86_64"
     },
-    "datalith-preview-1.1.0.rc.2-1.aarch64.rpm": {
-      "url": "https://github.com/mycelium-build/datalith-app/releases/download/v1.1.0-rc.2/datalith-preview-1.1.0.rc.2-1.aarch64.rpm",
-      "sha256": "0d439b3eb3bd50ef2fca580c42f656f2c94d1e2f1c8b17d9e6fa678f767dd899",
+    "datalith-preview-1.2.0.rc.1-1.aarch64.rpm": {
+      "url": "https://github.com/mycelium-build/datalith-app/releases/download/v1.2.0-rc.1/datalith-preview-1.2.0.rc.1-1.aarch64.rpm",
+      "sha256": "f5e21caedc2e35f43451e28773a3c20a50ea10cbcb4d43d8cca6cca7a547fe36",
       "format": "rpm",
       "arch": "aarch64"
     },
-    "datalith-preview-1.1.0rc.2-1-x86_64.pkg.tar.zst": {
-      "url": "https://github.com/mycelium-build/datalith-app/releases/download/v1.1.0-rc.2/datalith-preview-1.1.0rc.2-1-x86_64.pkg.tar.zst",
-      "sha256": "aa4e970a8b91191168e8eaebb326b37d59cff9157a4e5c5cb0a06219499a69e6",
+    "datalith-preview-1.2.0rc.1-1-x86_64.pkg.tar.zst": {
+      "url": "https://github.com/mycelium-build/datalith-app/releases/download/v1.2.0-rc.1/datalith-preview-1.2.0rc.1-1-x86_64.pkg.tar.zst",
+      "sha256": "482844042b73476ac5cdec68e5476a8636b7df029572dd7033359f7bc61c2408",
       "format": "pacman",
       "arch": "x86_64"
     },
-    "datalith-preview-1.1.0rc.2-1-aarch64.pkg.tar.zst": {
-      "url": "https://github.com/mycelium-build/datalith-app/releases/download/v1.1.0-rc.2/datalith-preview-1.1.0rc.2-1-aarch64.pkg.tar.zst",
-      "sha256": "d0aba2bdf1439d8d3e03a8264eb3ccdb26c57bcb6bd50e4da968dd9a782ae7e7",
+    "datalith-preview-1.2.0rc.1-1-aarch64.pkg.tar.zst": {
+      "url": "https://github.com/mycelium-build/datalith-app/releases/download/v1.2.0-rc.1/datalith-preview-1.2.0rc.1-1-aarch64.pkg.tar.zst",
+      "sha256": "26d5074c9691d62e2a99a7947b71498a68846676d66c15804f5bb86ba033358e",
       "format": "pacman",
       "arch": "aarch64"
     }
